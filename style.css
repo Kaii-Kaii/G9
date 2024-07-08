@@ -1,34 +1,178 @@
-*
-{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/*set array and offset for flower petals*/
+ #flower1 path {
+	 stroke-dasharray: 165;
+	 stroke-dashoffset: 165;
 }
-
-html,
-body
-{
-    overflow: hidden;
+ #flower2 path {
+	 stroke-dasharray: 210;
+	 stroke-dashoffset: 210;
 }
-
-.experience
-{
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
+ #flower3 path {
+	 stroke-dasharray: 180;
+	 stroke-dashoffset: 180;
 }
-
-.credits
-{
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    color: #ffffff;
-    text-align: right;
-    font-family: 'Roboto', sans-serif;
+ #flower4 path {
+	 stroke-dasharray: 200;
+	 stroke-dashoffset: 200;
 }
-
-.credits a
-{
-    color: inherit;
+ #flower5 path {
+	 stroke-dasharray: 150;
+	 stroke-dashoffset: 150;
 }
+ #flower6 path {
+	 stroke-dasharray: 235;
+	 stroke-dashoffset: 235;
+}
+/*two sets of loops for flower petals (based on number of petals) to add animation and delay*/
+ #flower1 path:nth-of-type(1), #flower2 path:nth-of-type(1), #flower5 path:nth-of-type(1) {
+	 animation: draw 2s ease-in forwards;
+	 animation-delay: 0.02s;
+}
+ #flower1 path:nth-of-type(2), #flower2 path:nth-of-type(2), #flower5 path:nth-of-type(2) {
+	 animation: draw 2s ease-in forwards;
+	 animation-delay: 0.04s;
+}
+ #flower1 path:nth-of-type(3), #flower2 path:nth-of-type(3), #flower5 path:nth-of-type(3) {
+	 animation: draw 2s ease-in forwards;
+	 animation-delay: 0.06s;
+}
+ #flower1 path:nth-of-type(4), #flower2 path:nth-of-type(4), #flower5 path:nth-of-type(4) {
+	 animation: draw 2s ease-in forwards;
+	 animation-delay: 0.08s;
+}
+ #flower1 path:nth-of-type(5), #flower2 path:nth-of-type(5), #flower5 path:nth-of-type(5) {
+	 animation: draw 2s ease-in forwards;
+	 animation-delay: 0.1s;
+}
+ #flower1 path:nth-of-type(6), #flower2 path:nth-of-type(6), #flower5 path:nth-of-type(6) {
+	 animation: draw 2s ease-in forwards;
+	 animation-delay: 0.12s;
+}
+ #flower1 path:nth-of-type(7), #flower2 path:nth-of-type(7), #flower5 path:nth-of-type(7) {
+	 animation: draw 2s ease-in forwards;
+	 animation-delay: 0.14s;
+}
+ #flower1 path:nth-of-type(8), #flower2 path:nth-of-type(8), #flower5 path:nth-of-type(8) {
+	 animation: draw 2s ease-in forwards;
+	 animation-delay: 0.16s;
+}
+ #flower1 path:nth-of-type(9), #flower2 path:nth-of-type(9), #flower5 path:nth-of-type(9) {
+	 animation: draw 2s ease-in forwards;
+	 animation-delay: 0.18s;
+}
+ #flower1 path:nth-of-type(10), #flower2 path:nth-of-type(10), #flower5 path:nth-of-type(10) {
+	 animation: draw 2s ease-in forwards;
+	 animation-delay: 0.2s;
+}
+ #flower1 path:nth-of-type(11), #flower2 path:nth-of-type(11), #flower5 path:nth-of-type(11) {
+	 animation: draw 2s ease-in forwards;
+	 animation-delay: 0.22s;
+}
+ #flower1 path:nth-of-type(12), #flower2 path:nth-of-type(12), #flower5 path:nth-of-type(12) {
+	 animation: draw 2s ease-in forwards;
+	 animation-delay: 0.24s;
+}
+ #flower3 path:nth-of-type(1), #flower4 path:nth-of-type(1), #flower6 path:nth-of-type(1) {
+	 animation: draw 2s ease-in forwards;
+	 animation-delay: 0.02s;
+}
+ #flower3 path:nth-of-type(2), #flower4 path:nth-of-type(2), #flower6 path:nth-of-type(2) {
+	 animation: draw 2s ease-in forwards;
+	 animation-delay: 0.04s;
+}
+ #flower3 path:nth-of-type(3), #flower4 path:nth-of-type(3), #flower6 path:nth-of-type(3) {
+	 animation: draw 2s ease-in forwards;
+	 animation-delay: 0.06s;
+}
+ #flower3 path:nth-of-type(4), #flower4 path:nth-of-type(4), #flower6 path:nth-of-type(4) {
+	 animation: draw 2s ease-in forwards;
+	 animation-delay: 0.08s;
+}
+ #flower3 path:nth-of-type(5), #flower4 path:nth-of-type(5), #flower6 path:nth-of-type(5) {
+	 animation: draw 2s ease-in forwards;
+	 animation-delay: 0.1s;
+}
+ #flower3 path:nth-of-type(6), #flower4 path:nth-of-type(6), #flower6 path:nth-of-type(6) {
+	 animation: draw 2s ease-in forwards;
+	 animation-delay: 0.12s;
+}
+ #flower3 path:nth-of-type(7), #flower4 path:nth-of-type(7), #flower6 path:nth-of-type(7) {
+	 animation: draw 2s ease-in forwards;
+	 animation-delay: 0.14s;
+}
+ #flower3 path:nth-of-type(8), #flower4 path:nth-of-type(8), #flower6 path:nth-of-type(8) {
+	 animation: draw 2s ease-in forwards;
+	 animation-delay: 0.16s;
+}
+ #flower3 path:nth-of-type(9), #flower4 path:nth-of-type(9), #flower6 path:nth-of-type(9) {
+	 animation: draw 2s ease-in forwards;
+	 animation-delay: 0.18s;
+}
+/*set array and offset for flower stems*/
+ #stem1 {
+	 stroke-dasharray: 341;
+	 stroke-dashoffset: -341;
+}
+ #stem2--top {
+	 stroke-dasharray: 87;
+	 stroke-dashoffset: 87;
+}
+ #stem2--bottom {
+	 stroke-dasharray: 298;
+	 stroke-dashoffset: 298;
+}
+ #stem3--top {
+	 stroke-dasharray: 90;
+	 stroke-dashoffset: 90;
+}
+ #stem3--bottom {
+	 stroke-dasharray: 253;
+	 stroke-dashoffset: 253;
+}
+ #stem4--top {
+	 stroke-dasharray: 181;
+	 stroke-dashoffset: 181;
+}
+ #stem4--bottom {
+	 stroke-dasharray: 161;
+	 stroke-dashoffset: 161;
+}
+ #stem5--top {
+	 stroke-dasharray: 34;
+	 stroke-dashoffset: 34;
+}
+ #stem5--bottom {
+	 stroke-dasharray: 186;
+	 stroke-dashoffset: 186;
+}
+ #stem6 {
+	 stroke-dasharray: 270;
+	 stroke-dashoffset: 270;
+}
+/*set animations for flower stems*/
+ #stem1, #stem6 {
+	 animation: draw 0.75s ease-in forwards;
+	 animation-delay: 1.25s;
+}
+ #stem2--bottom, #stem3--bottom, #stem4--bottom, #stem5--bottom {
+	 animation: draw 0.5s ease-in forwards;
+	 animation-delay: 1.5s;
+}
+ #stem2--top, #stem3--top, #stem4--top, #stem5--top {
+	 animation: draw 0.5s ease-in forwards;
+	 animation-delay: 1.25s;
+}
+/*animation keyframe for flower petals & stems*/
+ @keyframes draw {
+	 to {
+		 stroke-dashoffset: 0;
+	}
+}
+/*default styles for svg as a whole*/
+ svg {
+	 display: block;
+	/*so margin auto will work*/
+	 margin: 2rem auto 0 auto;
+	 width: 20rem;
+}
+ 
