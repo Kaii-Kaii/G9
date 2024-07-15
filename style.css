@@ -1,37 +1,12 @@
-html, body {
-	padding: 0;
-	margin: 0;
-}
-.container {
-	position: fixed;
-	top: 0;
-	left: 0;
-}
-#text-input {
-	position: fixed;
-	top: 0;
-	left: 0;
-	opacity: 0;
-	pointer-events: none;
-}
+/*  https://codepen.io/Mahi-K/full/wvqYLEL  */
 
-.links {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    font-size: 18px;
-    font-family: sans-serif;
-}
-.links a {
-    text-decoration: none;
-    color: black;
-    margin-left: 1em;
-}
-.links a:hover {
-    text-decoration: underline;
-}
-.links a img.icon {
-    display: inline-block;
-    height: 1em;
-    margin: 0 0 -0.1em 0.3em;
-}
+div {
+			  margin: 0;
+			 
+			background: url(http://trabajando.unpocodetodo.info/images/branch.gif)  no-repeat, -o-radial-gradient( 0px 0px, circle farthest-side, rgba(251, 251, 251, 0), rgba(255, 255, 255, 0));
+			  background: url(http://trabajando.unpocodetodo.info/images/branch.gif)  no-repeat, radial-gradient( farthest-side circle at 0px 0px, rgba(251, 251, 251, 0), rgba(255, 255, 255, 0));
+			  background: url(http://trabajando.unpocodetodo.info/images/branch.gif) no-repeat, -webkit-radial-gradient( 0px 0px, circle farthest-side, rgba(251, 251, 251, 0), rgba(255, 255, 255, 0));
+			  background: url(http://trabajando.unpocodetodo.info/images/branch.gif) no-repeat);
+			  background: url(http://trabajando.unpocodetodo.info/images/branch.gif) no-repeat, -ms-radial-gradient( 0px 0px, circle farthest-side, rgba(251, 251, 251, 0), rgba(255, 255, 255, 0));
+			 background-size: 75%; 
+			}
