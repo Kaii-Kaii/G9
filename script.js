@@ -64,34 +64,41 @@ class Flower {
   }
 }
 
+// Thêm các trình xử lý sự kiện chuột và chạm
+svg.addEventListener("mousedown", startDrawing);
+svg.addEventListener("mouseup", stopDrawing);
+svg.addEventListener("mousemove", draw);
 
-svg.addEventListener("mousedown", e => {
-  // clear the canvas
+svg.addEventListener("touchstart", startDrawing);
+svg.addEventListener("touchend", stopDrawing);
+svg.addEventListener("touchmove", draw);
+
+function startDrawing(e) {
+  // Chuyển đổi sự kiện touch thành sự kiện mouse
+  if (e.touches) e = e.touches[0];
   while (svg.lastChild) {
     svg.removeChild(svg.lastChild);
   }
-  // if bool == true I can draw
   bool = true;
-});
+}
 
-svg.addEventListener("mouseup", e => {
+function stopDrawing(e) {
+  if (e.touches) e = e.touches[0];
   bool = false;
   previous = {};
-});
+}
 
-svg.addEventListener("mousemove", e => {
+function draw(e) {
   if (bool) {
+    if (e.touches) e = e.touches[0];
     m = oMousePosSVG(e);
-    // number of petals
     let n = 2 + ~~(Math.random() * 4);
-    // set the scale
     if (previous.x) {
       let d = dist(m, previous);
       scale = d / 30;
     } else {
       scale = 1;
     }
-
     let flower = new Flower(n, { x: m.x, y: m.y }, scale, svg);
     setTimeout(() => {
       flower.G.setAttribute("class", `_${flower.n}`);
@@ -99,8 +106,8 @@ svg.addEventListener("mousemove", e => {
 
     previous.x = m.x;
     previous.y = m.y;
-  } //if bool
-});
+  }
+}
 
 function oMousePosSVG(e) {
   var p = svg.createSVGPoint();
