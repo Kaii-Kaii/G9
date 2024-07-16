@@ -1,3 +1,8 @@
+
+body {
+  touch-action: none;
+}
+
 body{--t:.5; --scale:3;}
 svg.root{width:1px;height:1px;position:absolute;left:-100em;}
 svg{
