@@ -1,41 +1,30 @@
-
 body {
-  touch-action: none;
+  background: #131b21;
 }
 
-body{--t:.5; --scale:3;}
-svg.root{width:1px;height:1px;position:absolute;left:-100em;}
-svg{
-  width: 100vw;
-  height: 100vh;
-  background:#c5d9fe;
-  fill-opacity:0.75;
+.container {
+  width: 50%;
+  margin: 0 auto;
 }
 
-symbol{overflow:visible}
-
-svg use{transform:rotate(0deg)); transition:transform calc(var(--t) * 1s);}
-
-svg g.a{transition:transform calc(var(--t) * 1s);}
-svg g.a{transform:scale(var(--scale)) rotate(-90deg);
-filter:url('#f')
+svg#flower-frame {
+  height: 90vh;
+  width: 100%;
 }
 
 
-._2{--n : 2;}
-._3{--n : 3;}
-._4{--n : 4;}
-._5{--n : 5;}
 
-svg .a g:nth-of-type(1){transform:rotate(calc(-.5 * 180deg / var(--n)));}
-svg .a g:nth-of-type(2){transform:rotate(calc( .5 * 180deg / var(--n)));}
-
-svg .a g:nth-of-type(1) use:nth-of-type(2){transform:rotate(calc(-1deg * 180 / var(--n)));}
-svg .a g:nth-of-type(1) use:nth-of-type(3){transform:rotate(calc(-2deg * 180 / var(--n)));}
-svg .a g:nth-of-type(1) use:nth-of-type(4){transform:rotate(calc(-3deg * 180 / var(--n)));}
-svg .a g:nth-of-type(1) use:nth-of-type(5){transform:rotate(calc(-4deg * 180 / var(--n)));}
-
-svg .a g:nth-of-type(2) use:nth-of-type(2){transform:rotate(calc(1deg * 180 / var(--n)));}
-svg .a g:nth-of-type(2) use:nth-of-type(3){transform:rotate(calc(2deg * 180 / var(--n)));}
-svg .a g:nth-of-type(2) use:nth-of-type(4){transform:rotate(calc(3deg * 180 / var(--n)));}
-svg .a g:nth-of-type(2) use:nth-of-type(5){transform:rotate(calc(4deg * 180 / var(--n)));}
+#Footer_group_1_,
+[id^=PinkFlowerGroup],
+[id^=BaseGroup] path,
+[id^=LeafGroup] path,
+path[id^=Stroke],
+g[id^=BudGroup] g[id^=BudGroup] g[id^=Bud],
+#Bud8_1_,
+#Bud10_1_,
+#Bud23_1_,
+#Bud26_1_,
+[id^=Dots],
+[id^=Flourish] {
+  visibility: hidden;
+}
