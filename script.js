@@ -1,166 +1,76 @@
-const SVG_NS = "http://www.w3.org/2000/svg";
-const SVG_XLINK = "http://www.w3.org/1999/xlink";
-let rid = null;
-let gon = 7;// 3,4,5,6....
+var strokesLeftBottom = $('#LeftBottomGroup_1_ path[id^=Stroke]').toArray().reverse();
+var strokesLeftTop = $('#LeftTopGroup_1_ path[id^=Stroke]').toArray().reverse();
+var strokesRightBottom = $('#RightBottomGroup_1_ path[id^=Stroke]').toArray().reverse();
+var strokesRightTop = $('#RightTopGroup_1_ path[id^=Stroke]').toArray().reverse();
 
-const colors = [
-  "#ba3763",
-  "#d34076",
-  "#dbb0cc",
-  "#fddafa",
-  "#fef2fe",
-  "#eec0db",
-  "#ca809a",
-  "#e9d8e8"
-];
+var stemGroup1 = ['#Stem2_1_', '#Stem3_1_', '#Stem4_1_', '#Stem5a_1_', '#Stem5b_1_', '#Stem6_1_', '#Stem7a_1_', '#Stem7b_1_', '#Stem7c_1_', '#Stem8_1_'];
+var stemGroup2 = ['#Stem17_1_', '#Stem18_1_', '#Stem19_1_', '#Stem20a_1_', '#Stem20b_1_', '#Stem21_1_', '#Stem22a_1_', '#Stem22b_1_', '#Stem22c_1_', '#Stem23_1_'];
+var stemGroup3 = ['#Stem10_1_', '#Stem11_1_', '#Stem12a_1_', '#Stem12b_1_'];
+var stemGroup4 = ['#Stem26_1_', '#Stem27_1_', '#Stem28a_1_', '#Stem28b_1_'];
+var stemGroup5 = ['#Stem13a_1_', '#Stem13b_1_', '#Stem13c_1_'];
+var stemGroup6 = ['#Stem29a_1_', '#Stem29b_1_', '#Stem29c_1_'];
+var stemVarsFrom = { drawSVG: "0% 0%", autoAlpha: 1 };
+var stemVarsTo = { drawSVG: "0% 100%", duration:2, stagger:0.5 };
 
-let m = { x: 0, y: 0 };
-let previous = { x: 0, y: 0 };
-let scale = 1;
-let bool = false;
+var leafGroup1 = ['#Leaf2_1_','#Leaf17_1_'];
+var leafGroup2 = ['#Leaf4_1_','#Leaf5a_1_', '#Leaf5b_1_'];
+var leafGroup3 = ['#Leaf19_1_','#Leaf20a_1_', '#Leaf20b_1_'];
+var leafGroup4 = ['#Leaf11_1_','#Leaf12a_1_', '#Leaf12b_1_'];
+var leafGroup5 = ['#Leaf27_1_','#Leaf28a_1_', '#Leaf28b_1_'];
+var leafGroup6 = ['#Leaf13a_1_','#Leaf13b_1_', '#Leaf13c_1_'];
+var leafGroup7 = ['#Leaf29a_1_','#Leaf29b_1_', '#Leaf29c_1_'];
 
-class Flower {
-  constructor(n, pos, scale, parent) {
-    this.n = n;
-    this.scale = scale;
-    this.pos = pos;
-    this.width = 40;
-    this.height = 40;
-    this.color = colors[~~(Math.random() * colors.length)];
-    this.parent = parent;
+var budGroup1 = ['#Bud3_1_', '#Bud6_1_'];
+var budGroup2 = ['#Bud18_1_', '#Bud21_1_'];
+var budGroup3 = ['#Bud7a_1_', '#Bud7b_1_', '#Bud7c_1_', '#Bud8_1_'];
+var budGroup4 = ['#Bud22a_1_', '#Bud22b_1_', '#Bud22c_1_', '#Bud23_1_'];
+var budGroup5 = ['#Bud10_1_', '#Bud26_1_'];
 
-    this.markup();
-  }
+var dots = $('#Dots_1_');
 
-  markup() {
-    this.G = document.createElementNS(SVG_NS, "g");
-    this.G.setAttribute("style", `--scale:${this.scale};`);
-    let rot = ~~(Math.random() * 180);
-    this.G.setAttributeNS(
-      null,
-      "transform",
-      `translate(${this.pos.x},${this.pos.y}) rotate(${rot})`
-    );
-    this.G.setAttributeNS(null, "fill", this.color);
-    let ga = document.createElementNS(SVG_NS, "g");
-    ga.setAttribute("class", "a");
+var tl = gsap.timeline()
+.set('#Footer_group_1_', {autoAlpha: 1})
+.fromTo( ['#Stem16_1_','#Stem1_1_'], {drawSVG: "0% 0%" }, {duration:1.5, drawSVG: "0% 100%" }, 'start')
+.fromTo('#BaseGroup16_1_ path', {autoAlpha: 1, scale: 0, transformOrigin: '-10% 130%'}, {duration:1, scale:1}, 1.2, 'flower1')
+.fromTo('#PinkFlowerGroup16_1_', {autoAlpha: 1, scale: 0, transformOrigin: '35% 110%'}, {duration:2, scale:1}, 'flower1-=0.55')
+.fromTo('#BaseGroup1_1_ path', {autoAlpha: 1, scale: 0, transformOrigin: '90% 130%'}, {duration:1, scale:1}, 1.2, 'flower1')
+.fromTo('#PinkFlowerGroup1_1_', {autoAlpha: 1, scale: 0, transformOrigin: '65% 110%'}, {duration:2, scale:1}, 'flower1-=0.55')
+.fromTo( ['#Stem9_1_','#Stem25_1_'], {drawSVG: "0% 0%",  autoAlpha: 1 }, {duration:2, drawSVG: "0% 100%" }, 'flower1+=0.5')
+.fromTo('#BaseGroup9_1_ path', {autoAlpha: 1, scale: 0, transformOrigin: '-10% 130%'}, {duration:1, scale:1}, 'flower2-=0.5')
+.fromTo('#PinkFlowerGroup9_1_', {autoAlpha: 1, scale: 0, transformOrigin: '5% 110%'}, {duration:2, scale:1}, 'flower2')
+.fromTo('#BaseGroup25_1_ path', {autoAlpha: 1, scale: 0, transformOrigin: '105% 130%'}, {duration:1, scale:1}, 'flower2-=0.5')
+.fromTo('#PinkFlowerGroup25_1_', {autoAlpha: 1, scale: 0, transformOrigin: '95% 110%'}, {duration:2, scale:1}, 'flower2')
 
-    for (let i = 0; i < 2; i++) {
-      // left, right
-      let g = document.createElementNS(SVG_NS, "g");
-      for (let j = 0; j < this.n; j++) {
-        let use = document.createElementNS(SVG_NS, "use");
-        use.setAttributeNS(SVG_XLINK, "xlink:href", `#petal${this.n}`);
-        use.setAttributeNS(null, "width", this.width);
-        use.setAttributeNS(null, "height", this.height);
+//stems
+.fromTo(stemGroup1, stemVarsFrom, stemVarsTo, 'start+=0.1')
+.fromTo(stemGroup2, stemVarsFrom, stemVarsTo, 'start+=0.1')
+.fromTo(stemGroup3, stemVarsFrom, stemVarsTo, 'flower2-=1.5')
+.fromTo(stemGroup4, stemVarsFrom, stemVarsTo, 'flower2-=1.5')
+.fromTo(stemGroup5, stemVarsFrom, stemVarsTo, 'flower3-=1')
+.fromTo(stemGroup6, stemVarsFrom, stemVarsTo, 'flower3-=1')
 
-        g.appendChild(use);
-      }
-      ga.appendChild(g);
-    }
-    this.G.appendChild(ga);
+//leaves
+.fromTo(leafGroup1, {autoAlpha: 1, scale: 0, transformOrigin:gsap.utils.wrap(["80% 45%", "20% 45%"]) }, {duration:2, scale:1}, 'flower1-=1')
+.fromTo(leafGroup2, {autoAlpha: 1, scale: 0, transformOrigin:gsap.utils.wrap(["80% 25%", "60% 35%", "70% 75%"]) }, {duration:2, stagger:0.5, scale:1}, 'flower1')
+.fromTo(leafGroup3, {autoAlpha: 1, scale: 0, transformOrigin:gsap.utils.wrap(["20% 25%", "40% 35%", "30% 75%"]) }, {duration:2, stagger:0.5, scale:1}, 'flower1')
+.fromTo(leafGroup4, {autoAlpha: 1, scale: 0, transformOrigin:gsap.utils.wrap(["90% 70%", "100% 100%", "0% 90%"]) }, {duration:2, stagger:0.5, scale:1}, 'flower2')
+.fromTo(leafGroup5, {autoAlpha: 1, scale: 0, transformOrigin:gsap.utils.wrap(["10% 70%", "0% 100%", "100% 90%"]) }, {duration:2, stagger:0.5, scale:1}, 'flower2')
+.fromTo(leafGroup6, {autoAlpha: 1, scale: 0, transformOrigin:gsap.utils.wrap(["0% 90%", "10% 50%", "70% 60%"]) }, {duration:2, stagger:0.5, scale:1}, 'flower3')
+.fromTo(leafGroup7, {autoAlpha: 1, scale: 0, transformOrigin:gsap.utils.wrap(["100% 90%", "90% 50%", "30% 60%"]) }, {duration:2, stagger:0.5, scale:1}, 'flower3')
 
-    this.parent.appendChild(this.G);
-  }
-}
+//buds
+.fromTo(budGroup1, {autoAlpha: 1, scale: 0, transformOrigin:gsap.utils.wrap(['220% -10%', '55% 100%']) }, {duration:2, scale:1, stagger:2.75}, 'flower1-=0.75')
+.fromTo(budGroup2, {autoAlpha: 1, scale: 0, transformOrigin:gsap.utils.wrap(['-120% -10%', '45% 100%']) }, {duration:2, scale:1, stagger:2.75}, 'flower1-=0.75')
+.fromTo(budGroup3, {autoAlpha: 1, scale: 0, transformOrigin:gsap.utils.wrap(['10% 110%', '0% 100%', '0% 100%', '80% 100%']) }, {duration:2, scale:1, stagger:0.5},  'flower2')
+.fromTo(budGroup4, {autoAlpha: 1, scale: 0, transformOrigin:gsap.utils.wrap(['90% 110%', '100% 100%', '100% 100%', '20% 100%']) }, {duration:2, scale:1, stagger:0.5}, 'flower2')
+.fromTo(budGroup5, {autoAlpha: 1, scale: 0, transformOrigin:gsap.utils.wrap(['-50% 120%', '150% 120%']) }, {duration:2, scale:1},  'flower2-=0.5')
 
-// Thêm các trình xử lý sự kiện chuột và chạm
-svg.addEventListener("mousedown", startDrawing);
-svg.addEventListener("mouseup", stopDrawing);
-svg.addEventListener("mousemove", draw);
+//strokes
+.fromTo(strokesLeftBottom, stemVarsFrom, { drawSVG: "0% 100%", duration:2, stagger:1 }, 1)
+.fromTo(strokesRightBottom, stemVarsFrom, { drawSVG: "0% 100%", duration:2, stagger:1 }, 1)
+.fromTo(strokesLeftTop, stemVarsFrom, { drawSVG: "0% 100%", duration:2, stagger:1 }, 'flower1+=0.5')
+.fromTo(strokesRightTop, stemVarsFrom, { drawSVG: "0% 100%", duration:2, stagger:1 }, 'flower1+=0.5')
 
-svg.addEventListener("touchstart", startDrawing);
-svg.addEventListener("touchend", stopDrawing);
-svg.addEventListener("touchmove", draw);
-
-function startDrawing(e) {
-  // Chuyển đổi sự kiện touch thành sự kiện mouse
-  if (e.touches) e = e.touches[0];
-  while (svg.lastChild) {
-    svg.removeChild(svg.lastChild);
-  }
-  bool = true;
-}
-
-function stopDrawing(e) {
-  if (e.touches) e = e.touches[0];
-  bool = false;
-  previous = {};
-}
-
-function draw(e) {
-  if (bool) {
-    if (e.touches) e = e.touches[0];
-    m = oMousePosSVG(e);
-    let n = 2 + ~~(Math.random() * 4);
-    if (previous.x) {
-      let d = dist(m, previous);
-      scale = d / 30;
-    } else {
-      scale = 1;
-    }
-    let flower = new Flower(n, { x: m.x, y: m.y }, scale, svg);
-    setTimeout(() => {
-      flower.G.setAttribute("class", `_${flower.n}`);
-    }, 50);
-
-    previous.x = m.x;
-    previous.y = m.y;
-  }
-}
-
-function oMousePosSVG(e) {
-  var p = svg.createSVGPoint();
-  p.x = e.clientX;
-  p.y = e.clientY;
-  var ctm = svg.getScreenCTM().inverse();
-  var p = p.matrixTransform(ctm);
-  return p;
-}
-
-function dist(p1, p2) {
-  let dx = p2.x - p1.x;
-  let dy = p2.y - p1.y;
-  return Math.sqrt(dx * dx + dy * dy);
-}
-
-///////// Initial polygon //////////////
-
-function algorithmPoly(gon, R) {
-  let points = [];
-  for (let a = 0; a < 2 * Math.PI; a += 0.1) {
-    let r =
-      R *
-      Math.cos(Math.PI / gon) /
-      Math.cos(a % (2 * Math.PI / gon) - Math.PI / gon);
-
-    let x = 5000 + r * Math.cos(a);
-    let y = 5000 + r * Math.sin(a);
-    points.push({ x: x, y: y, r: 5 });
-  }
-  return points;
-}
-
-let points = algorithmPoly(gon, 2500);
-
-let frames = 0;
-function Frame() {
-  rid = window.requestAnimationFrame(Frame);
-
-  if (frames >= points.length) {
-    window.cancelAnimationFrame(rid);
-    rid = null;
-  }
-  m = points[frames];
-  let n = 2 + ~~(Math.random() * 4);
-  scale = ~~(Math.random() * 12) + 3;
-
-  let flower = new Flower(n, { x: m.x, y: m.y }, scale, svg);
-  setTimeout(() => {
-    flower.G.setAttribute("class", `_${flower.n}`);
-  }, 50);
-
-  frames++;
-}
-
-Frame();
+//dots
+.fromTo(dots, 6, {autoAlpha: 0}, {autoAlpha: 1, ease: Expo.easeOut}, 'flower3+=1')
+.fromTo(dots, 5, {scale: 0, transformOrigin: '50% 50%' }, {scale: 1, ease: Expo.easeOut}, 'flower3')
