@@ -1,26 +1,54 @@
-const { memo, useRef, useEffect } = React;
+const path = anime.path('#path');
 
-// Awesome lottie animation by Mikhail Voloshin 
-// https://lottiefiles.com/32147-cute-cat-works
-const LOTTIE_PATH = 'https://assets.codepen.io/3685267/cute-cat-works.json';
-const Lottie = memo(({ className, path }) => {
-  const elm = useRef();
-  const animation = useRef();
-
-  useEffect(() => {
-    animation.current = lottie.loadAnimation({
-      path,
-      container: elm.current,
-      renderer: 'svg',
+const timeline = anime.timeline({
+  easing: 'easeInOutExpo',
+  duration: 1000,
+  complete: () => {
+    anime({
+      targets: '.leaf',
+      rotate: 40,
+      duration: 3000,
       loop: true,
-      autoplay: true });
-
-  }, []);
-
-  return /*#__PURE__*/React.createElement("div", { className: className, ref: elm });
+      direction: 'alternate',
+      easing: 'easeInOutQuad'
+    });
+    anime({
+      targets: '.petals',
+      scale: 1.05,
+      duration: 6000,
+      loop: true,
+      direction: 'alternate',
+      easing: 'easeInOutQuad'
+    });
+  }
 });
 
-const App = () => /*#__PURE__*/React.createElement(Lottie, { className: "h-screen container mx-auto", path: LOTTIE_PATH });
+timeline.add({
+  targets: '.stem',
+  scale: [0, 1],
+})
 
-ReactDOM.render( /*#__PURE__*/React.createElement(App, null),
-document.getElementById("root"));
+timeline.add({
+  targets: '.leaf',
+  rotate: [0, 45],
+})
+timeline.add({
+  targets: '.petals',
+  scale: [0, 1],
+}, '-=1000');
+
+timeline.add({
+  targets: '#bee',
+  opacity: [0, 1],
+}, '-=750');
+
+
+anime({
+  targets: '#bee',
+  translateX: path('x'),
+  translateY: path('y'),
+  rotate: path('angle'),
+  loop: true,
+  duration: 12500,
+  easing: 'linear'
+});
