@@ -1,85 +1,100 @@
-//click to change
-//This isn't really a texture but inspired by  #cpc-flora-fauna  #codepenchallenge
+import * as THREE from "https://esm.sh/three@0.151.3"
 
-//doodled flowers from my pairings here: https://medium.com/@sophiawood/cinquains-for-the-oregon-fawn-lily-f186b1ccb76e
+import { OrbitControls } from "https://esm.sh/three@0.151.3/addons/controls/OrbitControls.js"
+import { OutlineEffect } from "https://esm.sh/three@0.151.3/addons/effects/OutlineEffect.js"
+import { GLTFLoader } from "https://esm.sh/three@0.151.3/examples/jsm/loaders/GLTFLoader.js"
 
-
-let fawnlilies = []
-let p
-let b = 100
-function preload(){
-  for(let i = 1;i<=6;i++){
-    fawnlilies[i-1] = loadImage('https://assets.codepen.io/4559259/Fl'+str(i)+'.png');
-  }
-}
-function setup(){
-  createCanvas(windowWidth,windowHeight);
-  t = floor(random(0,5.999));
-  background(100,200,100)
-  noLoop()
-  angleMode(DEGREES)
-   cnt = 0
-  p = floor(random(0,2.99))
-  
-}
-function draw(){
-  translate(width/2,height/2)
-  compositions(p)
-  
-
-  
+const canvas = document.querySelector('.webgl')
+const scene = new THREE.Scene()
+const textureLoader = new THREE.TextureLoader()
+const sizes = {
+    width: window.innerWidth,
+    height: window.innerHeight
 }
 
-function compositions(n){
-  if(n===0){
-    for (let i = 0;i<100;i++){
-    background(0,50,10,1)
-    t = floor(random(0,5.999));
-    r = fawnlilies[t].width/fawnlilies[t].height
-    image(fawnlilies[t],randomGaussian(0,width/2),-height/2+i*2,(b + i*4)/r,b+i*4);
-  }
-  }
-  if(n===1){
-    a = random(10,30)
-    t = floor(random(0,5.999));
-    r = fawnlilies[t].width/fawnlilies[t].height
-    image(fawnlilies[t],-40,-40,(b )/r,b);
-    
-    for (let i = 0;i<100;i++){
-      push()
-    background(0,50,10,1)
-    t = floor(random(0,5.999));
-      
-      rotate(180+i*a)
-    r = fawnlilies[t].width/fawnlilies[t].height
-    image(fawnlilies[t],0,0,(b + i*4)/r,b+i*4);
-      pop()
-  }
-  
-  }
-  
-  if(n===2){
-    for(let i = 0;i<100;i++){
-      background(0,50,10,1)
+// Base camera
+const camera = new THREE.PerspectiveCamera(10, sizes.width / sizes.height, 0.1, 500)
+camera.position.x = 60
+camera.position.y = 35
+camera.position.z = 80
+scene.add(camera)
+
+//Controls
+const controls = new OrbitControls(camera, canvas)
+controls.enableDamping = true
+controls.enableZoom = true
+controls.enablePan = true
+controls.minPolarAngle = Math.PI / 5
+controls.maxPolarAngle = Math.PI / 2
+
+// Renderer
+const renderer = new THREE.WebGLRenderer({
+    canvas: canvas,
+    antialias: true,
+    alpha: true
+})
+
+renderer.setSize(sizes.width, sizes.height)
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+renderer.outputEncoding = THREE.sRGBEncoding
+
+
+
+// Materials
+const bakedTexture = textureLoader.load('https://rawcdn.githack.com/ricardoolivaalonso/ThreeJS-Room15/9d7db1ccdb3f5af8eae99fe8cb25228459bae93d/dist/baked.jpg')
+bakedTexture.flipY = false
+bakedTexture.encoding = THREE.sRGBEncoding
+
+
+const bakedMaterial = new THREE.MeshBasicMaterial({ 
+    map: bakedTexture,
+    side: THREE.DoubleSide
+})
+
+bakedMaterial.userData.outlineParameters = {
+	// thickness: 0.0025,
+	thickness: 0.0025,
+	color: [0, 0, 0],
+	alpha: 1,
+	keepAlive: true,
+	visible: true
+}
+
+//Loader
+const loader = new GLTFLoader()
+loader.load('https://rawcdn.githack.com/ricardoolivaalonso/ThreeJS-Room15/9d7db1ccdb3f5af8eae99fe8cb25228459bae93d/dist/model.glb',
+    (gltf) => {
+        const model = gltf.scene
+        model.traverse( child => child.material = bakedMaterial )
+        scene.add(model)
+    },
+    ( xhr ) => {
+		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )
     }
-    a = random(10,30)
-    t = floor(random(0,5.999));
-    r = fawnlilies[t].width/fawnlilies[t].height
-    image(fawnlilies[t],-150,-100,(b*3 )/r,b*3);
-    
-    
-  
-  }
+)
+
+// Animation
+const minPan = new THREE.Vector3( -5, -2, -5 )
+const maxPan = new THREE.Vector3( 5, 2, 5 )
+const effect = new OutlineEffect( renderer )
+
+const tick = () => {
+    controls.update()
+	controls.target.clamp( minPan, maxPan )
+    // renderer.render(scene, camera)
+	effect.render(scene, camera)
+    window.requestAnimationFrame(tick)
 }
 
-function mousePressed(){
-  setup()
-  draw()
-  p = floor(random(0,2.99))
-}
+tick()
 
-function keyPressed(){
-  setup()
-  draw()
-  p = floor(random(0,2.99))
-}
+
+window.addEventListener('resize', () =>
+{
+    sizes.width = window.innerWidth
+    sizes.height = window.innerHeight
+    camera.aspect = sizes.width / sizes.height
+    camera.updateProjectionMatrix()
+    renderer.setSize(sizes.width, sizes.height)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+})
