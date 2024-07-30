@@ -1,100 +1,262 @@
-import * as THREE from "https://esm.sh/three@0.151.3"
+const { Anchor, Shape } = Zdog;
 
-import { OrbitControls } from "https://esm.sh/three@0.151.3/addons/controls/OrbitControls.js"
-import { OutlineEffect } from "https://esm.sh/three@0.151.3/addons/effects/OutlineEffect.js"
-import { GLTFLoader } from "https://esm.sh/three@0.151.3/examples/jsm/loaders/GLTFLoader.js"
+(() => {
+	const element = document.querySelector("canvas");
+	const context = element.getContext("2d");
+	const { width, height } = element;
+	const zoom = 5;
 
-const canvas = document.querySelector('.webgl')
-const scene = new THREE.Scene()
-const textureLoader = new THREE.TextureLoader()
-const sizes = {
-    width: window.innerWidth,
-    height: window.innerHeight
-}
+	const w = width / zoom;
+	const h = height / zoom;
+	const x = w / 2;
+	const y = h / 2;
 
-// Base camera
-const camera = new THREE.PerspectiveCamera(10, sizes.width / sizes.height, 0.1, 500)
-camera.position.x = 60
-camera.position.y = 35
-camera.position.z = 80
-scene.add(camera)
+	const columns = 10;
+	const rows = 10;
+	const gx = w / columns;
+	const gy = h / rows;
 
-//Controls
-const controls = new OrbitControls(camera, canvas)
-controls.enableDamping = true
-controls.enableZoom = true
-controls.enablePan = true
-controls.minPolarAngle = Math.PI / 5
-controls.maxPolarAngle = Math.PI / 2
+	const radius = w / 4;
+	const number = 16;
 
-// Renderer
-const renderer = new THREE.WebGLRenderer({
-    canvas: canvas,
-    antialias: true,
-    alpha: true
-})
+	const PI = Math.PI;
+	const TAU = PI * 2;
+	const points = Array(number)
+		.fill()
+		.map((_, i, { length }) => {
+			const theta = PI * -1 + (TAU / length) * i;
+			const points = Array(number)
+				.fill()
+				.map((_, j, { length }) => {
+					const a = PI * -1 + (TAU / length) * j;
+					const x = radius * Math.sin(theta) * Math.cos(a);
+					const y = radius * Math.sin(theta) * Math.sin(a);
+					const z = radius * Math.cos(theta);
 
-renderer.setSize(sizes.width, sizes.height)
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-renderer.outputEncoding = THREE.sRGBEncoding
+					return { x, y, z };
+				});
+			return points;
+		})
+		.flat();
 
+	const colors = {
+		sky: "hsl(246 42% 21%)",
+		lights: "hsl(187 53% 97%)",
+		firework: ["hsl(359 87% 74%)", "hsl(209 95% 72%)", "hsl(243 62% 76%)"]
+	};
 
+	const strokes = [0.4, 0.8];
 
-// Materials
-const bakedTexture = textureLoader.load('https://rawcdn.githack.com/ricardoolivaalonso/ThreeJS-Room15/9d7db1ccdb3f5af8eae99fe8cb25228459bae93d/dist/baked.jpg')
-bakedTexture.flipY = false
-bakedTexture.encoding = THREE.sRGBEncoding
+	const root = new Anchor();
 
+	const background = new Shape({
+		addTo: root,
+		color: colors.sky,
+		stroke: 0,
+		fill: true,
+		path: [
+			{ x: 0, y },
+			{
+				bezier: [
+					{ x, y },
+					{ x, y },
+					{ x, y: 0 }
+				]
+			},
+			{
+				bezier: [
+					{ x, y: y * -1 },
+					{ x, y: y * -1 },
+					{ x: 0, y: y * -1 }
+				]
+			},
+			{
+				bezier: [
+					{ x: x * -1, y: y * -1 },
+					{ x: x * -1, y: y * -1 },
+					{ x: x * -1, y: 0 }
+				]
+			},
+			{
+				bezier: [
+					{ x: x * -1, y },
+					{ x: x * -1, y },
+					{ x: 0, y }
+				]
+			}
+		],
+		translate: {
+			z: radius * -1
+		}
+	});
 
-const bakedMaterial = new THREE.MeshBasicMaterial({ 
-    map: bakedTexture,
-    side: THREE.DoubleSide
-})
+	const lights = new Anchor({
+		addTo: root,
+		translate: {
+			z: radius * 2
+		},
+		scale: 0.8
+	});
 
-bakedMaterial.userData.outlineParameters = {
-	// thickness: 0.0025,
-	thickness: 0.0025,
-	color: [0, 0, 0],
-	alpha: 1,
-	keepAlive: true,
-	visible: true
-}
+	const planets = new Anchor({
+		addTo: lights
+	});
 
-//Loader
-const loader = new GLTFLoader()
-loader.load('https://rawcdn.githack.com/ricardoolivaalonso/ThreeJS-Room15/9d7db1ccdb3f5af8eae99fe8cb25228459bae93d/dist/model.glb',
-    (gltf) => {
-        const model = gltf.scene
-        model.traverse( child => child.material = bakedMaterial )
-        scene.add(model)
-    },
-    ( xhr ) => {
-		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )
-    }
-)
+	const stars = new Anchor({
+		addTo: lights
+	});
 
-// Animation
-const minPan = new THREE.Vector3( -5, -2, -5 )
-const maxPan = new THREE.Vector3( 5, 2, 5 )
-const effect = new OutlineEffect( renderer )
+	const planet = new Shape({
+		color: colors.lights
+	});
 
-const tick = () => {
-    controls.update()
-	controls.target.clamp( minPan, maxPan )
-    // renderer.render(scene, camera)
-	effect.render(scene, camera)
-    window.requestAnimationFrame(tick)
-}
+	const star = new Shape({
+		color: colors.lights,
+		stroke: 0,
+		fill: true,
+		path: [
+			{ x: 0, y: -1 },
+			{ x: 1, y: 0 },
+			{ x: 0, y: 1 },
+			{ x: -1, y: 0 }
+		]
+	});
 
-tick()
+	for (let i = 0; i < columns; i++) {
+		for (let j = 0; j < rows; j++) {
+			if (Math.random() > 0.3) {
+				planet.copy({
+					addTo: planets,
+					stroke: Math.random(),
+					translate: {
+						x: x * -1 + gx / 2 + gx * i + Math.random() * gx * 2 - gx,
+						y: y * -1 + gy / 2 + gy * j + Math.random() * gy * 2 - gy
+					}
+				});
+			} else if (Math.random() > 0.5) {
+				star.copy({
+					addTo: stars,
+					scale: Math.random(),
+					translate: {
+						x: x * -1 + gx / 2 + gx * i + Math.random() * gx * 2 - gx,
+						y: y * -1 + gy / 2 + gy * j + Math.random() * gy * 2 - gy
+					}
+				});
+			}
+		}
+	}
 
+	const firework = new Anchor({ addTo: root });
+	const particles = new Anchor({ addTo: firework });
+	const trails = new Anchor({ addTo: particles });
 
-window.addEventListener('resize', () =>
-{
-    sizes.width = window.innerWidth
-    sizes.height = window.innerHeight
-    camera.aspect = sizes.width / sizes.height
-    camera.updateProjectionMatrix()
-    renderer.setSize(sizes.width, sizes.height)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-})
+	for (let i = 0; i < points.length; i++) {
+		const { x, y, z } = points[i];
+		if (i % 3 === 0) {
+			new Shape({
+				addTo: trails,
+				color: colors.firework[0],
+				stroke: strokes[0],
+				path: [
+					{
+						x: x * 0.7,
+						y: y * 0.7,
+						z: z * 0.7
+					},
+					{
+						x: x * 0.95,
+						y: y * 0.95,
+						z: z * 0.95
+					}
+				]
+			});
+		}
+
+		new Shape({
+			addTo: particles,
+			color: colors.firework[0],
+			stroke: strokes[1],
+			translate: {
+				x: x,
+				y: y,
+				z: z
+			}
+		});
+	}
+
+	context.lineCap = "round";
+	context.lineJoin = "round";
+
+	const render = () => {
+		context.clearRect(0, 0, width, height);
+		context.save();
+		context.translate(width / 2, height / 2);
+		context.scale(zoom, zoom);
+		root.renderGraphCanvas(context);
+		context.restore();
+	};
+
+	firework.rotate.x = 0.8 + Math.random() * 0.4;
+	firework.rotate.y = Math.random() * TAU;
+
+	root.updateGraph();
+	render();
+
+	const easeOutQuint = (x) => 1 - Math.pow(1 - x, 5);
+
+	const rx = (x - radius) * 0.5;
+	const ry = (y - radius) * 0.5;
+	const rz = radius * 2;
+
+	let dx = 1;
+	let dy = 1;
+
+	background.translate.z = radius * -1;
+	particles.scale = 0;
+	trails.scale = 0;
+
+	let frame = null;
+	let ticker = 0;
+	const cycle = 200;
+
+	const animate = () => {
+		ticker += 1;
+
+		if (ticker >= cycle) {
+			const color =
+				colors.firework[Math.floor(Math.random() * colors.firework.length)];
+			for (const child of [...particles.children.slice(1), ...trails.children]) {
+				child.color = color;
+			}
+
+			dx = Math.random() > 0.5 ? 1 : -1;
+			dy = Math.random() > 0.5 ? 1 : -1;
+
+			firework.translate.x = Math.floor(Math.random() * (rx * 2)) - rx;
+			firework.translate.y = Math.floor(Math.random() * (ry * 2)) - ry;
+
+			firework.scale = 0.7 + Math.floor(Math.random() * 4) / 10;
+
+			firework.rotate.x = 0.8 + Math.random() * 0.4;
+			firework.rotate.y = Math.random() * TAU;
+
+			ticker = ticker % cycle;
+		}
+
+		const ease = easeOutQuint(ticker / cycle);
+
+		firework.rotate.x = (firework.rotate.x + 0.001 * dx) % TAU;
+		firework.rotate.y = (firework.rotate.y + 0.001 * dy) % TAU;
+		particles.scale = ease;
+		trails.scale = ease;
+
+		background.translate.z = rz * -1 + (rz + radius) ** ease;
+
+		root.updateGraph();
+		render();
+
+		frame = requestAnimationFrame(animate);
+	};
+
+	requestAnimationFrame(animate);
+})();
